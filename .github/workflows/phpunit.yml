@@ -32,6 +32,8 @@ jobs:
 
      steps:
        - uses: actions/checkout@v3
+         with:
+           node-version: '16'  # Node.jsバージョンの指定
        - name: Setup PHP
          uses: shivammathur/setup-php@v2
          with:

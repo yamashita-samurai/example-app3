@@ -120,6 +120,33 @@ services:
             - '/dev/shm:/dev/shm'
         networks:
             - sail
+  web:
+
+    build:
+      context: ./
+      dockerfile: /app/Dockerfile
+    tty: true
+    ports:
+      - "8000:8000"
+    #sshコンテナと通信できるようにする
+    networks:
+      - ssh_net
+
+  ssh:
+
+    build: ./ssh
+    #web containerが立ち上がるのと同時に立ち上がるようにする
+    depends_on:
+      - web
+    tty: true
+    # ssh keyをマウント
+    volumes:
+      - type: bind
+        source: ~/.ssh
+        target : /root/.ssh
+    #web containerと通信できるようにする
+    networks:
+      - ssh_net
 networks:
     sail:
         driver: bridge
